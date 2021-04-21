@@ -1,0 +1,45 @@
+example Formal Pseudocode
+START
+
+# a function that returns the sum of two numbers
+
+GET number1 and number 2
+SET sumNumber = number1 + number2
+PRINT sumNumber
+
+END
+___________________________________________________
+
+example Casual Pseudocode
+# a function that takes an array of strings, and returns a string that 
+is all those strings concatenated together
+
+Given an array of strings
+Set an empty placeholder string that will be added to as we iterate through the array
+Iterate through the array performing the following on each loop
+  - read the element
+  - add it to the empty string
+After iterating through, return the placeholder string that now has each
+array string element added to it.
+
+___________________________________________________
+
+example Formal Pseudocode
+START
+
+# a function that takes an array of integers, 
+and returns a new array with every other element
+
+//Input & Output 
+GET array of integers; arrayIntegers
+SET empty array; outputArray
+
+// Looping through arrayIntegers
+SET iterator = 0
+WHILE iterator <= length of arrayIntegers
+INCREMENT iterator 2 so as to skip every other element
+PUSH element at each iterator index of arrayIntegers into outputArray
+
+RETURN outputArray
+
+END
