@@ -19,4 +19,14 @@ const readline = require('readline-sync');
 console.log(`What is the bill?`);
 let bill = parseFloat(readline.question());
 
-console.log(bill);
+console.log(`What is the tip percentage?`);
+let tipPercent = parseFloat(readline.question());
+
+let tip = bill * (tipPercent/100);
+let total = bill + tip;
+
+console.log(`\nThe tip is $${tip.toFixed(2)}`);
+console.log(`The total is $${total.toFixed(2)}`);
+
+// Program successfully completes objective
+// though I like how the suggested solution integrates the question/prompt

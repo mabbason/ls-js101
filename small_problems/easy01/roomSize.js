@@ -23,3 +23,4 @@ let areaSqFt = (areaMeters * 10.7639).toFixed(2);
 
 prompt(`The area of the room is ${areaMeters} square meters (${areaSqFt} square feet).`);
 
+// Program successfully completes objective
