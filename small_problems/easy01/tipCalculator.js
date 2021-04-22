@@ -6,12 +6,17 @@ ignore input validation and assume that the user will enter numbers.
 
 Pseudocode workup:
 
-prompt for the total bill amount = bill
-prompt for the tip percentage = tipPercent
+prompt for the total bill amount = bill (parseFloat) to convert string to number
+prompt for the tip percentage = tipPercent (parseFloat) to convert string to number
 tip = bill * (tipPercent/100)
 total = bill + tip
 output tip \newline output total
 
 */
 
-const readline = require
+const readline = require('readline-sync');
+
+console.log(`What is the bill?`);
+let bill = parseFloat(readline.question());
+
+console.log(bill);
