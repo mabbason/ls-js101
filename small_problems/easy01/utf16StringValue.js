@@ -14,7 +14,6 @@ function utf16Value(singleStringArg) {
 function utf16Value(string) {
   let sumValue = 0;
   for(let i = string.length; i > 0; i -= 1) {
-    
     sumValue = string.charCodeAt(i-1) + sumValue;
   }
   return sumValue;
