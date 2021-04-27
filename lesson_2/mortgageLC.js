@@ -64,7 +64,7 @@ let loanAmount = getLoanAmount();
 let monthlyRate = getAPR() / MONTHS_IN_YEAR;
 let loanLengthMonths = getLoanLengthYears() * MONTHS_IN_YEAR;
 
-//Use all valid inputs for calculation
+
 let monthlyPayment = (loanAmount * (monthlyRate / (1 - Math.pow(
   (1 + monthlyRate), (-loanLengthMonths))))).toFixed(2);
 
@@ -72,7 +72,6 @@ let totalInterest = ((monthlyPayment * loanLengthMonths) -
                     loanAmount).toFixed(2);
 
 
-//Output calculations
 console.log(`\nLoan Calculation Results:\n
   Payment Every Month: $${monthlyPayment}\n
   Total of ${loanLengthMonths} Payments: $${(monthlyPayment * loanLengthMonths).toFixed(2)}\n
