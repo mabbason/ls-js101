@@ -1,94 +1,125 @@
 /*Question 1 
-Given a string, return a new string that replaces every occurrence of 
-the word "important" with "urgent":
+Will the code below raise an error?
 */
-let advice = "Few things in life are as important as house training your pet dinosaur.";
+
+
+let numbers = [1, 2, 3];
+numbers[6] = 5;
+//No it should add undefined elements to numbers until it can input 5 at index 6
+
+let numbers = [1, 2, 3];
+numbers[6] = 5;
+numbers[4];  // what will this line return?
+//It should return undefined
+
+/*
+Ah, I thought it put in undefined... but it just has empty slots. Literally nothing.
+*/
 
 /*Question 2 
-The Array.prototype.reverse method reverses the order of elements in 
-an array, and Array.prototype.sort can rearrange the elements in a 
-variety of ways, including descending. Both of these methods mutate 
-the original array as shown below. Write two distinct ways of reversing 
-the array without mutating the original array. Use reverse for the 
-first solution, and sort for the second.
-
-Bonus Question: Can you do it using the Array.prototype.forEach() method?
+How can you determine whether a given string ends 
+with an exclamation mark (!)?
 */
 
-let numbers = [1, 2, 3, 4, 5];
-numbers.reverse();
-console.log(numbers); // [ 5, 4, 3, 2, 1 ]
+let str1 = "Come over here!"; // true
+let str2 = "What's up, Doc?"; // false
 
-numbers = [1, 2, 3, 4, 5];
-numbers.sort((num1, num2) => num2 - num1);
-console.log(numbers); // [ 5, 4, 3, 2, 1 ]
+str1[str1.length - 1] === '!'; //proposed solution
+/*
+My method works but isn't as elegant I see. 
+*/
 
 /*Question 3
-Given a number and an array, determine whether the number is included in the array.
+Determine whether the following object of people 
+and their age contains an entry for 'Spot':
 */
-let numbers = [1, 2, 3, 4, 5, 15, 16, 17, 95, 96, 99];
 
-let number1 = 8;  // false
-let number2 = 95; // true
+let ages = { Herman: 32, Lily: 30, Grandpa: 402, Eddie: 10 };
+ages.keys().includes('Spot');
+
+/*
+Gah, chalk this one up to mental attrition and end-of-day brain. I read the docs
+and found that without the hint, but I didn't think it was a solution. 
+For some reason I thought it was searching the values, not the keys.
+*/
 
 /*Question 4
-Starting with the following string (below)
-show two different ways to put the expected "Four score and " in front of it.
+Using the following string, create a new string that contains all lowercase 
+letters except for the first character, which should be capitalized. 
+(See the example output.)
 */
-let famousWords = "seven years ago...";
+
+let munstersDescription = "the Munsters are CREEPY and Spooky.";
+// => The munsters are creepy and spooky.
+
+munstersDescription = munstersDescription[0].toUpperCase() + 
+  munstersDescription.slice(1).toLowerCase(); // proposed solution
+
+/*
+Pretty much the same thing it looks like.
+*/
 
 /*Question 5
-Given an array of numbers [1, 2, 3, 4, 5], mutate the array by 
-removing the number at index 2, so that the array becomes [1, 2, 4, 5].
+What will the following code output?
 */
+
+console.log(false == '0'); //answer: true
+console.log(false === '0'); //answer: false
+
+//Sweet, I just blew a coercion question on the quiz so it's nice to get this here
 
 /*Question 6
-ppose we build an array like this:
-
-Copy Code
-let flintstones = ["Fred", "Wilma"];
-flintstones.push(["Barney", "Betty"]);
-flintstones.push(["Bambam", "Pebbles"]);
-This code will create a nested array that looks like this:
-
-Copy Code
-["Fred", "Wilma", ["Barney", "Betty"], ["Bambam", "Pebbles"]];
-Create a new array that contains all of the above values, but in an un-nested format:
-
-Copy Code
-[ 'Fred', 'Wilma', 'Barney', 'Betty', 'Bambam', 'Pebbles' ]
+We have most of the Munster family in our ages object:
 */
+let ages = { Herman: 32, Lily: 30, Grandpa: 5843, Eddie: 10 };
+//Add entries for Marilyn and Spot to the object:
+let additionalAges = { Marilyn: 22, Spot: 237 };
+
+ages = object.assign(ages, additionalAges);
 
 /*Question 7
-Consider the following object:
-
-let flintstones = { Fred: 0, Wilma: 1, Barney: 2, Betty: 3, Bambam: 4, Pebbles: 5 };
-Create an array from this object that contains only two elements: Barney's name and Barney's number:
-
-[ 'Barney', 2 ]
-
+Determine whether the name Dino appears in the 
+strings below -- check each string separately):
 */
+
+let str1 = "Few things in life are as important as house training your pet dinosaur.";
+let str2 = "Fred and Wilma have a pet dinosaur named Dino.";
+
+str1.includes('Dino'); // false
+str2.includes('Dino'); // true
 
 /*
 Question 8
-How would you check whether the objects assigned to 
-variables numbers and table below are arrays?
+How can we add the family pet, "Dino", to the following array?
 */
-let numbers = [1, 2, 3, 4]; // true
-let table = { field1: 1, field2: 2, field3: 3, field4: 4 }; // false
+
+let flintstones = ["Fred", "Barney", "Wilma", "Betty", "Bambam", "Pebbles"];
+// with the push method
+flintstones.push('Dino');
+
+console.log(flintstones);
 
 /*
 Question 9
-Back in the stone age (before CSS), we used spaces to align things on the screen. 
-If we have a 40-character wide table of Flintstone family members, 
-how can we center the following title above the table with spaces?
+
+In the previous problem, our first answer added 'Dino' to the array like this:
 */
-let title = "Flintstone Family Members";
+
+let flintstones = ["Fred", "Barney", "Wilma", "Betty", "Bambam", "Pebbles"];
+// with the same method, just add elements
+flintstones.push('Dino', 'Hoppy');
+
+console.log(flintstones);
 
 /*
 Question 10
-Write two one-line expressions to count the number of lower-case t characters 
-in each of the following strings:
+
 */
-let statement1 = "The Flintstones Rock!";
-let statement2 = "Easy come, easy go.";
+let advice = "Few things in life are as important as house training your pet dinosaur.";
+
+// Expected return value:
+// => 'Few things in life are as important as '
+
+advice.split(' ').slice(0, 8).join(' ');
+
+//I suspected there was a way to do this without breaking it apart and recombining
