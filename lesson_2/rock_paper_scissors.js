@@ -7,6 +7,14 @@ const CHOICES_FULL_WORDS = {
   l: 'lizard',
   k: 'spock'
 };
+const WINNING_MOVES = {
+  rock: ['scissors', 'lizard'],
+  paper : ['rock', 'spock'],
+  scissors : ['paper', 'lizard'],
+  lizard : ['paper', 'spock'],
+  spock : ['scissors', 'rock']
+};
+
 const MATCH_WINNING_SCORE = 5;
 
 let userScore;
@@ -35,13 +43,7 @@ function getComputerChoice() {
 }
 
 function userIsWinner(userPlayer, computerPlayer) {
-  switch (userPlayer) {
-    case 'rock': return (computerPlayer === 'scissors' || computerPlayer === 'lizard');
-    case 'paper': return (computerPlayer === 'spock' || computerPlayer === 'rock');
-    case 'scissors': return (computerPlayer === 'paper' || computerPlayer === 'lizard');
-    case 'lizard': return (computerPlayer === 'paper' || computerPlayer === 'spock');
-    default: return (computerPlayer === 'rock' || computerPlayer === 'scissors');
-  }
+  return WINNING_MOVES[userPlayer].includes(computerPlayer);
 }
 
 function theWinnerIs(user, computer) {
@@ -69,7 +71,7 @@ function matchWinner() {
     return 'the computer.';
   }
 }
-
+console.clear();
 prompt(`Welcome to a high stakes game of human vs. computer!!\n
   It's time for ROCK, PAPER, SCISSORS, LIZARD, SPOCK!`);
 
@@ -86,6 +88,7 @@ do {
     let computerChoice = getComputerChoice();
     let pointWinner = theWinnerIs(userChoice, computerChoice);
 
+    console.clear();
     prompt(`You chose ${userChoice}, while the computer chose ${computerChoice}.`);
     console.log(`\n${pointWinner}`);
 
@@ -101,9 +104,9 @@ do {
   console.log(`\nDo you want to play again (y/n)?`);
   answer = readline.question().toLowerCase();
 
-  while (answer[0] !== 'n' && answer[0] !== 'y') {
+  while (answer !== 'n' && answer !== 'y') {
     prompt(`Please enter 'y' or 'n'.`);
     answer = readline.question().toLowerCase();
   }
-
+  console.clear();
 } while (answer === 'y');
