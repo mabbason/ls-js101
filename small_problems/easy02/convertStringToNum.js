@@ -15,12 +15,12 @@ const STRING_NUM_DIGITS = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5,
 };
 
 function stringToInteger(string) {
-  let numArray = [];
+  let num = 0;
   let stringArray = string.split('');
   stringArray.forEach(stDigit => {
-    numArray.push(STRING_NUM_DIGITS[stDigit]);
+    num = (num * 10) + STRING_NUM_DIGITS[stDigit];
   });
-  return numArray.join('');
+  return num;
 }
 
 console.log(stringToInteger("4321"));
