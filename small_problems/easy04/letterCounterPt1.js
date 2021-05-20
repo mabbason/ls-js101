@@ -15,6 +15,7 @@ function wordSizes(string) {
 }
 */
 
+
 function wordSizes(string) {
   let wordArr = string.split(' ');
   let wordSizesObj = {};
