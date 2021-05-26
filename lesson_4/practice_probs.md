@@ -64,3 +64,19 @@ arr.fill(1, 1, 5);
   thrid arg = 5, the stop index for where we want to stop filling
     in this case it fills to the end of the array
   Yes it is destructive. The return value of the above will be [1, 1, 1, 1, 1]. If we then log arr again we can check to see if the original array was modified. Which we will find that it was. 
+
+# Problem 7
+What is the return value of map in the following code? Why?
+
+['ant', 'bear'].map(elem => {
+  if (elem.length > 3) {
+    return elem;
+  }
+});
+
+  ## Response
+  [undefined, 'bear']
+  Because map uses the return value of the callback function to transform each element and return it to a new array. The explicit return in the callback function is nested within the if block, which is only accessed if the length of the element is greater than 3. The string 'ant' is NOT length greater than three so the callback function returns undefined.
+
+# Problem 8
+see practice08.js
