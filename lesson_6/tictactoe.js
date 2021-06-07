@@ -136,8 +136,8 @@ function computerChoosesSquare(board) {
     square = offenseOrDefense(board, HUMAN_MARKER);
   }
 
-  if (board[CENTER_SQUARE] === INITIAL_MARKER) {
-    square = CENTER_SQUARE;
+  if (!square) {
+    if (board[CENTER_SQUARE] === INITIAL_MARKER) square = CENTER_SQUARE;
   }
 
   if (!square) {
