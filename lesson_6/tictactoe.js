@@ -304,9 +304,10 @@ while (true) {
     console.log(` Player: ${playerScore}  Computer: ${computerScore}\n`)
 
     currentPlayer = alternatePlayer(firstPlayer);
-    console.log(`It is now the ${currentPlayer}'s turn to choose first.`);
-    console.log(`Press 'enter' to continue to the next round`);
-    let nextRound = READLINE.question();
+    console.log(`The next round will be the ${currentPlayer}'s turn to choose first.`);
+    console.log(`Press 'enter' to continue`);
+    READLINE.question();
+    console.clear();
   }
  
   console.log(`\n<><><><><><><><><><><><><><><>`);
