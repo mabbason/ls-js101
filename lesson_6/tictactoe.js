@@ -61,6 +61,7 @@ const WINNING_LINES = [
 ];
 const MATCH_WINNING_SCORE = 5;
 const CENTER_SQUARE = 5;
+const COMP_THINK_TIME = 1500;
 
 function joinOr(arr, sep = ', ', word = 'or') {
   let numSequence = '';
@@ -154,6 +155,8 @@ function computerChoosesSquare(board) {
   }
   
   board[square] = COMPUTER_MARKER;
+
+  //computerThinking();
 }
 
 function findWinningSquare(line, board, marker) {
@@ -244,9 +247,15 @@ function alternatePlayer(currentPlayer) {
   }
 }
 
+function computerThinking(ms) {
+  console.log('Computer thinking...');
+  let waitTill = new Date(new Date().getTime() + ms);
+  while(waitTill > new Date()){}
+}
+
 /* ********** Begin Main Program ********** */
 
-console.log(`\nWelcome to You vs Computer in Tic Tac Toe!`)
+console.log(`\nWelcome to You vs Computer in Tic Tac Toe!`);
 console.log(`___________________________________________\n`);
 while (true) {
   let playerScore = 0;
@@ -263,7 +272,12 @@ while (true) {
     
     while (true) {
       if (currentPlayer === 'player') displayBoard(board);
-      
+      if (currentPlayer === 'computer') {
+        console.clear();
+        computerThinking(COMP_THINK_TIME);
+        console.clear();
+      }
+
       chooseSquare(board, currentPlayer);
       currentPlayer = alternatePlayer(currentPlayer);
       if (theRoundWinnerIs(board) || boardFull(board)) break;
@@ -291,6 +305,8 @@ while (true) {
 
     currentPlayer = alternatePlayer(firstPlayer);
     console.log(`It is now the ${currentPlayer}'s turn to choose first.`);
+    console.log(`Press 'enter' to continue to the next round`);
+    let nextRound = READLINE.question();
   }
  
   console.log(`\n<><><><><><><><><><><><><><><>`);
