@@ -55,9 +55,9 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
 const WINNING_LINES = [
-    [1, 2, 3], [4, 5, 6], [7, 8, 9],
-    [1, 4, 7], [2, 5, 8], [3, 6, 9],
-    [1, 5, 9], [3, 5, 7]
+  [1, 2, 3], [4, 5, 6], [7, 8, 9],
+  [1, 4, 7], [2, 5, 8], [3, 6, 9],
+  [1, 5, 9], [3, 5, 7]
 ];
 const MATCH_WINNING_SCORE = 5;
 const CENTER_SQUARE = 5;
@@ -69,13 +69,13 @@ function joinOr(arr, sep = ', ', word = 'or') {
   if (arr.length === 1) {
     numSequence += arr[0];
   } else if (arr.length === 2) {
-    numSequence += `${arr[0]} ${word} ${arr[1]}` 
+    numSequence += `${arr[0]} ${word} ${arr[1]}`;
   } else if (arr.length >= 3) {
-    for (let i = 0; i < arr.length; i += 1) {
-      if (i === arr.length - 1) {
-        numSequence += `${word} ${arr[i]}`;
+    for (let index = 0; index < arr.length; index += 1) {
+      if (index === arr.length - 1) {
+        numSequence += `${word} ${arr[index]}`;
       } else {
-        numSequence += `${arr[i]}${sep}`;
+        numSequence += `${arr[index]}${sep}`;
       }
     }
   }
@@ -116,13 +116,13 @@ function initializeBoard() {
 
 function playerChoosesSquare(board) {
   let square;
-  
+
   while (true) {
     prompt(`Choose a square (${joinOr(emptySquares(board))}): `);
     square = READLINE.question().trim();
 
     if (emptySquares(board).includes(square)) break;
-    
+
     displayBoard(board);
     prompt('Sorry, that is not a valid choice.');
   }
@@ -130,19 +130,10 @@ function playerChoosesSquare(board) {
 }
 
 function computerChoosesSquare(board) {
-  let square;
-  for (let i = 0; i < WINNING_LINES.length; i += 1) {
-    let line = WINNING_LINES[i];
-    square = findWinningSquare(line, board, COMPUTER_MARKER);
-    if (square) break;
-  }
+  let square = offenseOrDefense(board, COMPUTER_MARKER);
 
   if (!square) {
-    for (let i = 0; i < WINNING_LINES.length; i += 1) {
-      let line = WINNING_LINES[i];
-      square = findWinningSquare(line, board, HUMAN_MARKER);
-      if (square) break;
-    }
+    square = offenseOrDefense(board, HUMAN_MARKER);
   }
 
   if (board[CENTER_SQUARE] === INITIAL_MARKER) {
@@ -153,10 +144,20 @@ function computerChoosesSquare(board) {
     let randomIndex = Math.floor(Math.random() * emptySquares(board).length);
     square = emptySquares(board)[randomIndex];
   }
-  
-  board[square] = COMPUTER_MARKER;
 
-  //computerThinking();
+  board[square] = COMPUTER_MARKER;
+}
+
+function offenseOrDefense(board, markerType) {
+  let square;
+
+  for (let index = 0; index < WINNING_LINES.length; index += 1) {
+    let line = WINNING_LINES[index];
+    square = findWinningSquare(line, board, markerType);
+    if (square) break;
+  }
+
+  return square;
 }
 
 function findWinningSquare(line, board, marker) {
@@ -172,7 +173,7 @@ function findWinningSquare(line, board, marker) {
 }
 
 function emptySquares(board) {
- return Object.keys(board).filter(key => board[key] === INITIAL_MARKER);
+  return Object.keys(board).filter(key => board[key] === INITIAL_MARKER);
 }
 
 function boardFull(board) {
@@ -182,7 +183,7 @@ function boardFull(board) {
 function theRoundWinnerIs(board) {
   for (let line = 0; line < WINNING_LINES.length; line += 1) {
     let [ sq1, sq2, sq3 ] = WINNING_LINES[line];
-    
+
     if (
       board[sq1] === HUMAN_MARKER &&
       board[sq2] === HUMAN_MARKER &&
@@ -205,20 +206,21 @@ function theMatchWinnerIs(playerScore, computerScore) {
   if (playerScore === MATCH_WINNING_SCORE) {
     return 'player';
   } else if (computerScore === MATCH_WINNING_SCORE) {
-    return 'computer'
+    return 'computer';
   } else {
     return false;
   }
 }
 
 function getCurrentPlayer() {
-  while(true) {
-    prompt(`Who should move first? (Enter 'p' for player or 'c' for computer)`)
+  let firstMover;
+  while (true) {
+    prompt(`Who should move first? (Enter 'p' for player or 'c' for computer)`);
     firstMover = READLINE.question().toLowerCase();
 
     if (firstMover !== 'p' && firstMover !== 'c') {
       console.clear();
-      prompt('That is not a valid choice.')
+      prompt('That is not a valid choice.');
     } else {
       break;
     }
@@ -227,7 +229,7 @@ function getCurrentPlayer() {
   if (firstMover === 'p') {
     return 'player';
   } else {
-    return 'computer'
+    return 'computer';
   }
 }
 
@@ -250,7 +252,9 @@ function alternatePlayer(currentPlayer) {
 function computerThinking(ms) {
   console.log('Computer thinking...');
   let waitTill = new Date(new Date().getTime() + ms);
-  while(waitTill > new Date()){}
+  while (waitTill > new Date()) {
+    continue;
+  }
 }
 
 /* ********** Begin Main Program ********** */
@@ -266,10 +270,10 @@ while (true) {
   let currentPlayer = getCurrentPlayer();
   console.clear();
 
-  while (true) { 
+  while (true) {
     let board = initializeBoard();
     let firstPlayer = currentPlayer;
-    
+
     while (true) {
       if (currentPlayer === 'player') displayBoard(board);
       if (currentPlayer === 'computer') {
@@ -287,7 +291,7 @@ while (true) {
     displayBoard(board);
 
     let roundWinner = theRoundWinnerIs(board);
-    
+
     if (roundWinner === 'Player') {
       playerScore += 1;
       if (theMatchWinnerIs(playerScore, computerScore)) break;
@@ -296,12 +300,12 @@ while (true) {
       computerScore += 1;
       if (theMatchWinnerIs(playerScore, computerScore)) break;
       prompt(`The computer won.`);
-    }else {
+    } else {
       prompt("It's a tie.");
     }
-    
+
     console.log(`  The current score is`);
-    console.log(` Player: ${playerScore}  Computer: ${computerScore}\n`)
+    console.log(` Player: ${playerScore}  Computer: ${computerScore}\n`);
 
     currentPlayer = alternatePlayer(firstPlayer);
     console.log(`The next round will be the ${currentPlayer}'s turn to choose first.`);
@@ -309,19 +313,19 @@ while (true) {
     READLINE.question();
     console.clear();
   }
- 
+
   console.log(`\n<><><><><><><><><><><><><><><>`);
   console.log(`Game, set, match!
   The ${theMatchWinnerIs(playerScore, computerScore)} won the whole thing!`);
 
   let response;
-  while(true) {
-    prompt('\nWould you like to play another match? (y or n)')
+  while (true) {
+    prompt('\nWould you like to play another match? (y or n)');
     response = READLINE.question().toLowerCase();
 
     if (response !== 'y' && response !== 'n') {
       console.clear();
-      prompt('That is not a valid choice.')
+      prompt('That is not a valid choice.');
     } else {
       break;
     }
