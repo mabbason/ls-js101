@@ -1,0 +1,41 @@
+[
+  { "card": "Ace",
+    "value": 11
+  },
+  { "card": "King",
+    "value": 10
+  },
+  { "card": "Queen",
+    "value": 10
+  },
+  { "card": "Jack",
+    "value": 10
+  },
+  { "card": "10",
+    "value": 10
+  },
+  { "card": "9",
+    "value": 9
+  },
+  { "card": "8",
+    "value": 8
+  },
+  { "card": "7",
+    "value": 7
+  },
+  { "card": "6",
+    "value": 6
+  },
+  { "card": "5",
+    "value": 5
+  },
+  { "card": "4",
+    "value": 4
+  },
+  { "card": "3",
+    "value": 3
+  },
+  { "card": "2",
+    "value": 2
+  }
+]

@@ -202,10 +202,10 @@ function theRoundWinnerIs(board) {
   return false; //Tie game.
 }
 
-function theMatchWinnerIs(playerScore, computerScore) {
-  if (playerScore === MATCH_WINNING_SCORE) {
+function theMatchWinnerIs(score) {
+  if (score['player'] === MATCH_WINNING_SCORE) {
     return 'player';
-  } else if (computerScore === MATCH_WINNING_SCORE) {
+  } else if (score['computer'] === MATCH_WINNING_SCORE) {
     return 'computer';
   } else {
     return false;
@@ -257,67 +257,23 @@ function computerThinking(ms) {
   }
 }
 
-/* ********** Begin Main Program ********** */
-
-console.log(`\nWelcome to You vs Computer in Tic Tac Toe!`);
-console.log(`___________________________________________\n`);
-while (true) {
-  let playerScore = 0;
-  let computerScore = 0;
-
-  console.log(`\nThe first to win ${MATCH_WINNING_SCORE} rounds, wins the match.`);
-
-  let currentPlayer = getCurrentPlayer();
-  console.clear();
-
+function playSingleRound(currentPlayer, board) {
   while (true) {
-    let board = initializeBoard();
-    let firstPlayer = currentPlayer;
-
-    while (true) {
-      if (currentPlayer === 'player') displayBoard(board);
-      if (currentPlayer === 'computer') {
-        console.clear();
-        computerThinking(COMP_THINK_TIME);
-        console.clear();
-      }
-
-      chooseSquare(board, currentPlayer);
-      currentPlayer = alternatePlayer(currentPlayer);
-      if (theRoundWinnerIs(board) || boardFull(board)) break;
+    if (currentPlayer === 'player') displayBoard(board);
+    if (currentPlayer === 'computer') {
+      console.clear();
+      computerThinking(COMP_THINK_TIME);
+      console.clear();
     }
 
-    console.clear();
-    displayBoard(board);
-
-    let roundWinner = theRoundWinnerIs(board);
-
-    if (roundWinner === 'Player') {
-      playerScore += 1;
-      if (theMatchWinnerIs(playerScore, computerScore)) break;
-      prompt(`The player won!`);
-    } else if (roundWinner === 'Computer') {
-      computerScore += 1;
-      if (theMatchWinnerIs(playerScore, computerScore)) break;
-      prompt(`The computer won.`);
-    } else {
-      prompt("It's a tie.");
-    }
-
-    console.log(`  The current score is`);
-    console.log(` Player: ${playerScore}  Computer: ${computerScore}\n`);
-
-    currentPlayer = alternatePlayer(firstPlayer);
-    console.log(`The next round will be the ${currentPlayer}'s turn to choose first.`);
-    console.log(`Press 'enter' to continue`);
-    READLINE.question();
-    console.clear();
+    chooseSquare(board, currentPlayer);
+    currentPlayer = alternatePlayer(currentPlayer);
+    //playSingleRound(currentPlayer, board);
+    if (theRoundWinnerIs(board) || boardFull(board)) break;
   }
+}
 
-  console.log(`\n<><><><><><><><><><><><><><><>`);
-  console.log(`Game, set, match!
-  The ${theMatchWinnerIs(playerScore, computerScore)} won the whole thing!`);
-
+function askToPlayAgain() {
   let response;
   while (true) {
     prompt('\nWould you like to play another match? (y or n)');
@@ -330,6 +286,73 @@ while (true) {
       break;
     }
   }
+  return response;
+}
+
+function increaseScore(roundWinner, score) {
+  if (roundWinner === 'Player') {
+    score['player'] += 1;
+  } else if (roundWinner === 'Computer') {
+    score['computer'] += 1;
+  }
+}
+
+function displayRoundResults(roundWinner, score) {
+  if (roundWinner === 'Player') {
+    prompt(`The player won!`);
+  } else if (roundWinner === 'Computer') {
+    prompt(`The computer won.`);
+  } else {
+    prompt("It's a tie.");
+  }
+
+  console.log(`  The current score is`);
+  console.log(` Player: ${score['player']}  Computer: ${score['computer']}\n`);
+}
+
+
+/* ********** Begin Main Program ********** */
+
+console.log(`\nWelcome to You vs Computer in Tic Tac Toe!`);
+console.log(`___________________________________________\n`);
+while (true) {
+  let score = {
+    player: 0,
+    computer: 0,
+  };
+
+  console.log(`\nThe first to win ${MATCH_WINNING_SCORE} rounds, wins the match.`);
+
+  let currentPlayer = getCurrentPlayer();
+  console.clear();
+
+  while (true) {
+    let board = initializeBoard();
+    let firstPlayer = currentPlayer;
+
+    playSingleRound(currentPlayer, board);
+
+    console.clear();
+    displayBoard(board);
+
+    increaseScore(theRoundWinnerIs(board), score);
+
+    if (theMatchWinnerIs(score)) break;
+
+    displayRoundResults(theRoundWinnerIs(board), score);
+
+    currentPlayer = alternatePlayer(firstPlayer);
+    console.log(`The next round will be the ${currentPlayer}'s turn to choose first.`);
+    console.log(`Press 'enter' to continue`);
+    READLINE.question();
+    console.clear();
+  }
+
+  console.log(`\n<><><><><><><><><><><><><><><>`);
+  console.log(`Game, set, match!
+  The ${theMatchWinnerIs(score)} won the whole thing!`);
+
+  let response = askToPlayAgain();
 
   if (response !== 'y') break;
   console.clear();
