@@ -61,13 +61,19 @@ function dealCard(cardDeck, participant) {
 }
 
 function initialDeal(cardDeck, player, dealer) {
-  for (let cardsDealt = 0; cardsDealt < 2; cardsDealt++) {
+  /*for (let cardsDealt = 0; cardsDealt < 2; cardsDealt++) {
     dealCard(cardDeck, player);
   }
 
   for (let cardsDealt = 0; cardsDealt < 2; cardsDealt++) {
     dealCard(cardDeck, dealer);
-  }
+  }*/ // original code but the following was more clear and less lines...
+  // I'm fine with below, but it just feels silly somehow. Maybe the
+  // DNR principle??
+  dealCard(cardDeck, player);
+  dealCard(cardDeck, player);
+  dealCard(cardDeck, dealer);
+  dealCard(cardDeck, dealer);
 }
 
 function displayHand(player, dealer, currentOrFinal = 'current') {
