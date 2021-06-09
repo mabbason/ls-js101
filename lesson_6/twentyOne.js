@@ -15,16 +15,13 @@ const SUITS = ['Hearts', 'Clubs', 'Spades', 'Diamonds'];
 const DEALER_STAYS = 17;
 const POINTS_THRESHOLD = 21;
 const PAUSE_TIME = 1500;
-/*
-let testHand = [
-  { card: '10', value: 10, suit: 'Spades' },
-  { card: 'King', value: 10, suit: 'Spades' },
-  { card: 'Ace', value: 11, suit: 'Clubs' },
-  { card: '2', value: 2, suit: 'Diamonds' },
-  { card: '3', value: 3, suit: 'Clubs' },
-  { card: 'Ace', value: 11, suit: 'Clubs' }
-];*/
-
+const MATCH_WINNING_SCORE = 5;
+const SUIT_SYMBOL = {
+  H: '\u2661',
+  C: '\u2667',
+  S: '\u2664',
+  D: '\u2662'
+};
 
 function BaseDeck() {
   let baseDeck = [];
@@ -73,19 +70,34 @@ function initialDeal(cardDeck, player, dealer) {
   }
 }
 
-function displayCurrentHand(player, dealer) {
-  console.log(`Dealer is showing: ${dealer[0]['card']} and unknown card`);
-  console.log(`You have a ${allCards(player)}`);
+function displayHand(player, dealer, currentOrFinal = 'current') {
+  if (currentOrFinal === 'final') {
+    console.log(`Dealer has a ${allCardsInHand(dealer)}`);
+    console.log(` for a total of ${pointsInHand(dealer)}`);
+  } else {
+    console.log(`Dealer is showing: ${SUIT_SYMBOL[dealer[0]['suit'][0]]} ` +
+    `${dealer[0]['card']} and an unknown card`);
+  }
+  debugger;
+  console.log(`\nYou have a ${allCardsInHand(player)}`);
+  console.log(` for a total of ${pointsInHand(player)}`);
 }
 
-function allCards(cardsInHand) {
+function allCardsInHand(cardsInHand) {
   if (cardsInHand.length === 2) {
-    return `${cardsInHand[0]['card']} and a ${cardsInHand[1]['card']}`;
+    return `${getSuit(cardsInHand[0])} ${cardsInHand[0]['card']}` +
+    ` and a ${getSuit(cardsInHand[1])} ${cardsInHand[1]['card']}`;
   } else {
     return cardsInHand.slice(0, -1).map(cardObj => {
-      return cardObj['card'];
-    }).join(', ') + ' and a ' + cardsInHand[cardsInHand.length - 1]['card'];
+      return `${getSuit(cardObj)} ${cardObj['card']}`;
+    }).join(', ') + ' and a ' +
+    `${getSuit(cardsInHand[cardsInHand.length - 1])} ` +
+    `${cardsInHand[cardsInHand.length - 1]['card']}`;
   }
+}
+
+function getSuit(cardObj) {
+  return SUIT_SYMBOL[cardObj['suit'][0]];
 }
 
 function dealersTurn(cardDeck, dealer) {
@@ -93,14 +105,7 @@ function dealersTurn(cardDeck, dealer) {
     dealCard(cardDeck, dealer);
     determineAceValue(dealer);
   }
-  pause('Dealer playing...');
-}
-
-function displayFinalHands(player, dealer) {
-  console.log(`Dealer has a ${allCards(dealer)}`);
-  console.log(` for a total of ${pointsInHand(dealer)}`);
-  console.log(`\nYou have a ${allCards(player)}`);
-  console.log(` for a total of ${pointsInHand(player)}`);
+  pauseAndDisplay('\nDealer playing...');
 }
 
 function determineAceValue(participant) {
@@ -118,7 +123,7 @@ function determineAceValue(participant) {
 function hitOrStay() {
   let answer;
   while (true) {
-    console.log("Hit or Stay (enter 'h' or 's')?");
+    console.log("\nWould you like to Hit or Stay (enter 'h' or 's')?");
     answer = readline.question().toLowerCase();
     if (answer === 'h' || answer === 's') break;
     else {
@@ -143,46 +148,122 @@ function askToPlayAgain() {
   return answer;
 }
 
-function pause(message, ms = PAUSE_TIME) {
+function pauseAndDisplay(message, ms = PAUSE_TIME) {
   console.log(message);
   let waitTill = new Date(new Date().getTime() + ms);
   while (waitTill > new Date()) {
     continue;
   }
+  console.clear();
 }
 
-/*********** Main Program ************/
-while (true) {
-  let shuffledDeck = shuffle(BaseDeck());
-  let playerHand = [];
-  let dealerHand = [];
+function playerTurn(cardDeck, player, dealer) {
+  determineAceValue(player);
 
-  pause('Dealing cards...');
-  initialDeal(shuffledDeck, playerHand, dealerHand);
-
-  while (!busted(playerHand)) {
-    displayCurrentHand(playerHand, dealerHand);
+  while (!busted(player)) {
+    displayHand(player, dealer);
 
     let answer = hitOrStay();
     if (answer === 's') break;
 
-    dealCard(shuffledDeck, playerHand);
-    determineAceValue(playerHand);
-    pause('Dealing card...', (PAUSE_TIME / 2));
+    dealCard(cardDeck, player);
+    pauseAndDisplay('Dealing card...', PAUSE_TIME / 2);
+
+    determineAceValue(player);
   }
+}
 
-  if (busted(playerHand)) {
-    console.log(`You have a ${allCards(playerHand)}`);
-    console.log('You busted... better luck next time\n');
+function displayWinner(player, dealer, matchScore) {
+  if (matchWinner(matchScore)) {
+    console.log(`\n\nThe ${matchWinner(matchScore)} has won the whole match!`);
   } else {
-    console.log("You chose to stay!");
+    console.log(`\n<> The ${handWinner(player, dealer)} won that hand <>`);
+    console.log(` The current match score is`);
+    console.log(`  Player: ${matchScore.player}  Dealer: ${matchScore.dealer}`);
+  }
+}
 
-    dealersTurn(shuffledDeck, dealerHand);
+function handWinner(player, dealer) {
+  if (busted(player)) {
+    return 'dealer';
+  } else if (busted(dealer)) {
+    return 'player';
+  } else if (pointsInHand(player) >= pointsInHand(dealer)) {
+    return 'player';
+  } else {
+    return 'dealer';
+  }
+}
 
-    displayFinalHands(playerHand, dealerHand);
+function matchWinner(matchScore) {
+  if (matchScore.player === MATCH_WINNING_SCORE) {
+    return 'player';
+  } else if (matchScore.dealer === MATCH_WINNING_SCORE) {
+    return 'dealer';
+  } else {
+    return false;
+  }
+}
+
+function increaseScore(handWinner, matchScore) {
+  matchScore[handWinner] += 1;
+}
+
+/*********** Main Program ************/
+while (true) {
+  console.log(`Welcome to ${POINTS_THRESHOLD}!`);
+  console.log(`  ...like BlackJack but simpler`);
+  console.log(`________________________________\n`);
+
+  console.log(`\nThe first to win ${MATCH_WINNING_SCORE} hands, wins the match\n`);
+
+  let matchScore = {
+    dealer: 0,
+    player: 0,
+  };
+
+  pauseAndDisplay('', PAUSE_TIME * 2);
+
+  while (true) {
+    let shuffledDeck = shuffle(BaseDeck());
+    let playerHand = [];
+    let dealerHand = [];
+
+    pauseAndDisplay('Dealing cards...', PAUSE_TIME);
+    initialDeal(shuffledDeck, playerHand, dealerHand);
+
+    playerTurn(shuffledDeck, playerHand, dealerHand);
+
+    if (busted(playerHand)) {
+      increaseScore('dealer', matchScore);
+      displayHand(playerHand, dealerHand, 'final');
+      console.log('\nYou busted... better luck next time');
+    } else {
+      console.log("\nYou chose to stay!");
+
+      dealersTurn(shuffledDeck, dealerHand);
+      console.clear();
+
+      displayHand(playerHand, dealerHand, 'final');
+      increaseScore(handWinner(playerHand, dealerHand), matchScore);
+    }
+
+    if (busted(dealerHand)) {
+      console.log(`\nThe dealer busted.`);
+    }
+
+    displayWinner(playerHand, dealerHand, matchScore);
+    if (matchWinner(matchScore)) break;
+
+    console.log(`\nPress 'enter' to continue`);
+    readline.question();
+    console.clear();
   }
 
   let answer = askToPlayAgain();
   if (answer === 'n') break;
   console.clear();
+
 }
+
+console.log(`Thanks for playing ${POINTS_THRESHOLD} today!`);
