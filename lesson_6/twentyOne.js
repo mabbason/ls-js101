@@ -11,22 +11,22 @@
 */
 const readline = require('readline-sync');
 const DECK_TEMPLATE = require('./cardDeckTemplate.json');
-const SUITS = ['Hearts', 'Clubs', 'Spades', 'Diamonds'];
 const DEALER_STAYS = 17;
 const POINTS_THRESHOLD = 21;
 const PAUSE_TIME = 1500;
 const MATCH_WINNING_SCORE = 5;
-const SUIT_SYMBOL = {
-  H: '\u2661',
-  C: '\u2667',
-  S: '\u2664',
-  D: '\u2662'
+const SUIT_AND_SYMBOL = {
+  Hearts: '\u2661',
+  Clubs: '\u2667',
+  Spades: '\u2664',
+  Diamonds: '\u2662'
 };
+
 
 function BaseDeck() {
   let baseDeck = [];
 
-  SUITS.forEach(suit => {
+  Object.keys(SUIT_AND_SYMBOL).forEach(suit => {
     DECK_TEMPLATE.forEach(card => {
       let newCard = Object.assign({}, card);
       newCard['suit'] = suit;
@@ -61,19 +61,10 @@ function dealCard(cardDeck, participant) {
 }
 
 function initialDeal(cardDeck, player, dealer) {
-  /*for (let cardsDealt = 0; cardsDealt < 2; cardsDealt++) {
-    dealCard(cardDeck, player);
-  }
-
   for (let cardsDealt = 0; cardsDealt < 2; cardsDealt++) {
+    dealCard(cardDeck, player);
     dealCard(cardDeck, dealer);
-  }*/ // original code but the following was more clear and less lines...
-  // I'm fine with below, but it just feels silly somehow. Maybe the
-  // DNR principle??
-  dealCard(cardDeck, player);
-  dealCard(cardDeck, player);
-  dealCard(cardDeck, dealer);
-  dealCard(cardDeck, dealer);
+  }
 }
 
 function displayHand(player, dealer, currentOrFinal = 'current') {
@@ -81,7 +72,7 @@ function displayHand(player, dealer, currentOrFinal = 'current') {
     console.log(`Dealer has a ${allCardsInHand(dealer)}`);
     console.log(` for a total of ${pointsInHand(dealer)}`);
   } else {
-    console.log(`Dealer is showing: ${SUIT_SYMBOL[dealer[0]['suit'][0]]} ` +
+    console.log(`Dealer is showing: ${SUIT_AND_SYMBOL[dealer[0]['suit']]} ` +
     `${dealer[0]['card']} and an unknown card`);
   }
   debugger;
@@ -103,7 +94,7 @@ function allCardsInHand(cardsInHand) {
 }
 
 function getSuit(cardObj) {
-  return SUIT_SYMBOL[cardObj['suit'][0]];
+  return SUIT_AND_SYMBOL[cardObj['suit']];
 }
 
 function dealersTurn(cardDeck, dealer) {
@@ -271,5 +262,5 @@ while (true) {
   console.clear();
 
 }
-
+console.clear();
 console.log(`Thanks for playing ${POINTS_THRESHOLD} today!`);
